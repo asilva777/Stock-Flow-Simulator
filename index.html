@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stock–Flow Simulator</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #eef2f5; margin: 0; padding: 2rem; color: #333; }
+    h1 { text-align: center; color: #004a99; }
+    .container { max-width: 800px; margin: auto; background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    svg { width: 100%; height: auto; }
+    .stock { fill: #3498db; stroke: #fff; stroke-width: 2; }
+    .flow-arrow { stroke: #27ae60; stroke-width: 3; fill: none; marker-end: url(#arrowhead); stroke-dasharray: 6; animation: flowDash 1.5s linear infinite; }
+    @keyframes flowDash { to { stroke-dashoffset: 12; } }
+    .label { font-size: 14px; fill: #333; text-anchor: middle; }
+    .tooltip { position: absolute; padding: 6px 10px; background: rgba(0,0,0,0.75); color: #fff; font-size: 13px; border-radius: 5px; pointer-events: none; opacity: 0; transition: opacity 0.2s; }
+    .controls { display: flex; justify-content: space-around; margin-top: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+    .control { display: flex; flex-direction: column; align-items: center; }
+    .control label { margin-bottom: 0.5rem; }
+    .control input[type=range] { width: 150px; }
+    .readout { font-size: 1.2rem; font-weight: bold; text-align: center; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+
+  <h1>Stock–Flow Simulator</h1>
+  <div class="container">
+    <div id="tooltip" class="tooltip"></div>
+    <svg viewBox="0 0 800 300">
+      <defs><marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto"><polygon points="0 0,10 3.5,0 7" fill="#27ae60"/></marker></defs>
+
+      <!-- Stocks -->
+      <rect class="stock" x="320" y="120" width="160" height="60" rx="10" ry="10" />
+      <text class="label" x="400" y="155" id="stockValue">100.0</text>
+
+      <!-- Inflow path -->
+      <line class="flow-arrow" x1="50" y1="150" x2="320" y2="150" data-tooltip="Inflow ↑" />
+      <text class="label" x="185" y="140" id="inflowLabel">Inflow: 5</text>
+
+      <!-- Outflow path -->
+      <line class="flow-arrow" x1="480" y1="150" x2="750" y2="150" data-tooltip="Outflow ↓" />
+      <text class="label" x="615" y="140" id="outflowLabel">Outflow: 3</text>
+    </svg>
+
+    <div class="controls">
+      <div class="control">
+        <label for="inflowSlider">Inflow Rate</label>
+        <input type="range" id="inflowSlider" min="0" max="20" value="5">
+      </div>
+      <div class="control">
+        <label for="outflowSlider">Outflow Rate</label>
+        <input type="range" id="outflowSlider" min="0" max="20" value="3">
+      </div>
+    </div>
+
+    <div class="readout">Current Stock: <span id="readoutStock">100.0</span></div>
+  </div>
+
+  <script>
+    const tooltip = document.getElementById('tooltip');
+    document.querySelectorAll('svg .flow-arrow').forEach(el => {
+      el.addEventListener('mouseover', e => { 
+        tooltip.textContent = e.target.getAttribute('data-tooltip'); tooltip.style.opacity = '1'; 
+      });
+      el.addEventListener('mousemove', e => { 
+        tooltip.style.top = (e.pageY + 10) + 'px'; tooltip.style.left = (e.pageX + 10) + 'px';
+      });
+      el.addEventListener('mouseout', () => { tooltip.style.opacity = '0'; });
+    });
+
+    const inflowSlider = document.getElementById('inflowSlider');
+    const outflowSlider = document.getElementById('outflowSlider');
+    const inflowLabel = document.getElementById('inflowLabel');
+    const outflowLabel = document.getElementById('outflowLabel');
+    const stockValueEl = document.getElementById('stockValue');
+    const readoutStockEl = document.getElementById('readoutStock');
+
+    let stock = 100.0;
+    let inflow = parseFloat(inflowSlider.value);
+    let outflow = parseFloat(outflowSlider.value);
+
+    inflowSlider.oninput = () => {
+      inflow = parseFloat(inflowSlider.value);
+      inflowLabel.textContent = `Inflow: ${inflow}`;
+    };
+    outflowSlider.oninput = () => {
+      outflow = parseFloat(outflowSlider.value);
+      outflowLabel.textContent = `Outflow: ${outflow}`;
+    };
+
+    function updateStock() {
+      const dt = 1; 
+      stock += (inflow - outflow) * dt;
+      if (stock < 0) stock = 0;
+      stockValueEl.textContent = stock.toFixed(1);
+      readoutStockEl.textContent = stock.toFixed(1);
+    }
+
+    setInterval(updateStock, 1000);
+  </script>
+
+</body>
+</html>
