@@ -14,114 +14,118 @@ const shockInput = document.getElementById('shockInput');
 const applyShockBtn = document.getElementById('applyShockBtn');
 
 // Scenarios
-const scenario1Label = document.getElementById('scenario1Label');
-const scenario2Label = document.getElementById('scenario2Label');
-const scenario3Label = document.getElementById('scenario3Label');
-const scenario1Btn = document.getElementById('scenario1Btn');
-const scenario2Btn = document.getElementById('scenario2Btn');
-const scenario3Btn = document.getElementById('scenario3Btn');
+const scenarioLabels = [
+  document.getElementById('scenario1Label'),
+  document.getElementById('scenario2Label'),
+  document.getElementById('scenario3Label')
+];
+const scenarioButtons = [
+  document.getElementById('scenario1Btn'),
+  document.getElementById('scenario2Btn'),
+  document.getElementById('scenario3Btn')
+];
 
 // Display
 const stockDisplay = document.getElementById('stockDisplay');
 const stockRect = document.querySelector('#diagram .stock-rect');
 
+// --- SIMULATION VARIABLES ---
+let stock = 1000;
+const SIMULATION_INTERVAL = 1000; // milliseconds
+const BASE_FLOW_VALUE = 50;
+
+// --- UTILITY FUNCTIONS ---
+function updateSliderDisplay(slider, valueDisplay) {
+  valueDisplay.textContent = slider.value;
+}
+
+function updateStockDisplay() {
+  stockDisplay.textContent = stock.toFixed(1);
+  const scale = Math.max(0.1, Math.min(2, stock / 1000));
+  stockRect.style.transformOrigin = 'center';
+  stockRect.style.transform = `scaleY(${scale})`;
+  stockRect.style.transition = 'transform 0.5s ease';
+}
+
+function applyShock(amount) {
+  if (!isNaN(amount)) {
+    stock += amount;
+    if (stock < 0) stock = 0;
+    updateStockDisplay();
+  }
+}
+
 // --- INITIALIZATION ---
-const updateSliderDisplay = (slider, valueDisplay) => {
-valueDisplay.textContent = slider.value;
-};
-
-const updateStockDisplay = () => {
-stockDisplay.textContent = stock.toFixed(1);
-const scale = Math.max(0.1, Math.min(2, stock / 1000)); // Base stock is 1000
-stockRect.style.transformOrigin = 'center';
-stockRect.style.transform = scaleY(${scale});
-stockRect.style.transition = 'transform 0.5s ease';
-};
-
-// Set initial UI states
 updateSliderDisplay(inflowSlider, inflowValue);
 updateSliderDisplay(outflowSlider, outflowValue);
 updateStockDisplay();
-scenario1Btn.textContent = scenario1Label.value;
-scenario2Btn.textContent = scenario2Label.value;
-scenario3Btn.textContent = scenario3Label.value;
 
-// --- EVENT LISTENERS FOR DYNAMIC LABELS ---
+// Set initial scenario button labels
+scenarioLabels.forEach((label, index) => {
+  scenarioButtons[index].textContent = label.value;
+});
 
+// --- EVENT LISTENERS ---
+// Dynamic label updates
 inflowLabelInput.addEventListener('input', () => {
-inflowTextSVG.textContent = inflowLabelInput.value;
+  inflowTextSVG.textContent = inflowLabelInput.value;
 });
-
 outflowLabelInput.addEventListener('input', () => {
-outflowTextSVG.textContent = outflowLabelInput.value;
+  outflowTextSVG.textContent = outflowLabelInput.value;
+});
+scenarioLabels.forEach((label, index) => {
+  label.addEventListener('input', () => {
+    scenarioButtons[index].textContent = label.value;
+  });
 });
 
-scenario1Label.addEventListener('input', () => {
-scenario1Btn.textContent = scenario1Label.value;
-});
-scenario2Label.addEventListener('input', () => {
-scenario2Btn.textContent = scenario2Label.value;
-});
-scenario3Label.addEventListener('input', () => {
-scenario3Btn.textContent = scenario3Label.value;
-});
-
-// --- EVENT LISTENERS FOR CONTROLS ---
-
+// Slider updates
 inflowSlider.addEventListener('input', () => updateSliderDisplay(inflowSlider, inflowValue));
 outflowSlider.addEventListener('input', () => updateSliderDisplay(outflowSlider, outflowValue));
 
+// Apply shock
 applyShockBtn.addEventListener('click', () => {
-const shockAmount = parseFloat(shockInput.value);
-if (!isNaN(shockAmount)) {
-stock += shockAmount;
-if (stock < 0) stock = 0;
-updateStockDisplay();
-shockInput.value = '';
-}
+  const shockAmount = parseFloat(shockInput.value);
+  applyShock(shockAmount);
+  shockInput.value = '';
 });
 
-// --- SCENARIOS ---
-
-scenario1Btn.addEventListener('click', () => {
-stock -= 300; // Disaster
-if (stock < 0) stock = 0;
-inflowSlider.value = 15;
-outflowSlider.value = 70;
-updateSliderDisplay(inflowSlider, inflowValue);
-updateSliderDisplay(outflowSlider, outflowValue);
-updateStockDisplay();
+// Scenario buttons
+scenarioButtons[0].addEventListener('click', () => {
+  stock -= 300; // Disaster
+  if (stock < 0) stock = 0;
+  inflowSlider.value = 15;
+  outflowSlider.value = 70;
+  updateSliderDisplay(inflowSlider, inflowValue);
+  updateSliderDisplay(outflowSlider, outflowValue);
+  updateStockDisplay();
 });
-
-scenario2Btn.addEventListener('click', () => {
-inflowSlider.value = 75; // Boom
-outflowSlider.value = 50;
-updateSliderDisplay(inflowSlider, inflowValue);
-updateSliderDisplay(outflowSlider, outflowValue);
+scenarioButtons[1].addEventListener('click', () => {
+  inflowSlider.value = 75; // Boom
+  outflowSlider.value = 50;
+  updateSliderDisplay(inflowSlider, inflowValue);
+  updateSliderDisplay(outflowSlider, outflowValue);
 });
-
-scenario3Btn.addEventListener('click', () => {
-inflowSlider.value = 58; // Policy
-outflowSlider.value = 42;
-updateSliderDisplay(inflowSlider, inflowValue);
-updateSliderDisplay(outflowSlider, outflowValue);
+scenarioButtons[2].addEventListener('click', () => {
+  inflowSlider.value = 58; // Policy
+  outflowSlider.value = 42;
+  updateSliderDisplay(inflowSlider, inflowValue);
+  updateSliderDisplay(outflowSlider, outflowValue);
 });
 
 // --- SIMULATION LOOP ---
-const runSimulationStep = () => {
-const currentInflowRate = parseFloat(inflowSlider.value) / 100;
-const currentOutflowRate = parseFloat(outflowSlider.value) / 100;
+function runSimulationStep() {
+  const inflowRate = parseFloat(inflowSlider.value) / 100;
+  const outflowRate = parseFloat(outflowSlider.value) / 100;
 
-const baseFlowValue = 50; 
-const inflowAmount = baseFlowValue * currentInflowRate;
-const outflowAmount = baseFlowValue * currentOutflowRate;
-const netChange = inflowAmount - outflowAmount;
+  const inflowAmount = BASE_FLOW_VALUE * inflowRate;
+  const outflowAmount = BASE_FLOW_VALUE * outflowRate;
+  const netChange = inflowAmount - outflowAmount;
 
-stock += netChange;
-if (stock < 0) stock = 0;
+  stock += netChange;
+  if (stock < 0) stock = 0;
 
-updateStockDisplay();
-};
+  updateStockDisplay();
+}
 
 setInterval(runSimulationStep, SIMULATION_INTERVAL);
-});
