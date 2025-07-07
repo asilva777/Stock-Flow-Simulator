@@ -1,97 +1,246 @@
+/* General Body & Typography */
+:root {
+  --primary-color: #00796b; /* Teal */
+  --inflow-color: #2196f3;  /* Blue */
+  --outflow-color: #f44336; /* Red */
+  --stock-color: #4caf50;   /* Green */
+  --background-color: #f4f6f8;
+  --card-background: #ffffff;
+  --text-color: #333;
+  --light-text-color: #fff;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 body {
-  font-family: 'Montserrat Classic', Oswald;
-  margin: 0;
-  color:#ffffff;
-  background:#0000FF;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.6;
+  margin: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-header, footer {
+/* Header & Footer */
+header {
+  background-color: var(--primary-color);
+  color: var(--light-text-color);
   text-align: center;
-  background: #0000FF;
-  color: #ffffff;
-  padding: 1rem;
+  padding: 1.5rem 1rem;
+  box-shadow: var(--box-shadow);
 }
 
-h1 { margin: 0; font-size: 1.8rem; }
-h2 { margin: 0.5rem 0; }
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
 
-.container {
+header p {
+  margin: 0.5rem 0 0;
+  opacity: 0.9;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  margin-top: auto;
+  background-color: #e0e0e0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Main Content Layout */
+main {
+  width: 100%;
   max-width: 900px;
-  margin: auto;
-  padding: 1rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: grid;
+  gap: 1.5rem;
 }
 
-.instructions {
-  background: #0000FF;
-  color: #ffffff;
-  padding: 1rem;
-  border-radius: 8px;
+/* Section & Card Styling */
+section {
+  background: var(--card-background);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+h2 {
+  margin-top: 0;
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 0.5rem;
   margin-bottom: 1rem;
+  color: var(--primary-color);
 }
 
-.instructions ol {
-  padding-left: 1.2rem;
+/* Diagram */
+.diagram svg {
+  width: 100%;
+  height: auto;
 }
 
+/* Controls Section */
 .controls {
   display: grid;
-  gap: 1rem;
-  background: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1rem;
+  gap: 1.25rem;
 }
 
-.controls label { font-weight: 500; }
+.controls label {
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 
-.controls input[type="range"], 
-.controls input[type="number"] {
+.controls span {
+  font-weight: normal;
+  color: var(--primary-color);
+  background: #e0f2f1;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+/* Custom Slider Styles */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
   width: 100%;
+  height: 10px;
+  background: #ddd;
+  border-radius: 5px;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity .2s;
 }
 
-button {
-  background:#0000FF;
-  color: #ffffff;
-  border: none;
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
-  border-radius: 4px;
+input[type="range"]:hover {
+  opacity: 1;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--primary-color);
   cursor: pointer;
-  transition: background 0.3s ease;
+  border-radius: 50%;
+  border: 2px solid var(--card-background);
 }
 
-button:hover, button:focus {
-  background: #0000FF;
-  color: #ffffff;
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--primary-color);
+  cursor: pointer;
+  border-radius: 50%;
+  border: 2px solid var(--card-background);
 }
 
-.chart {
-  margin-top: 2rem;
-  text-align: center;
-  background: #0000FF;
-  color: #ffffff;
+
+/* Shock Input & Button */
+.controls div {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
 }
 
-svg {
-  max-width: 100%;
-  height: auto;
-  background:  #0000FF;
+input[type="number"] {
+  padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 1rem;
+  flex-grow: 1;
 }
 
+button, .scenario-btn {
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  font-weight: bold;
+}
+
+button:hover, .scenario-btn:hover {
+    transform: translateY(-2px);
+}
+
+#applyShockBtn {
+  background-color: #ff9800; /* Orange */
+  color: var(--light-text-color);
+}
+#applyShockBtn:hover {
+    background-color: #f57c00;
+}
+
+
+/* Scenarios Section */
 .scenarios {
-  margin-top: 1rem;
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
 }
 
 .scenario-btn {
-  margin: 0.3rem;
+  background-color: #e0e0e0;
+  color: #333;
+  flex-grow: 1;
 }
 
-@media (max-width: 600px) {
-  .controls {
-    grid-template-columns: 1fr;
+.scenario-btn:hover {
+    background-color: #d5d5d5;
+}
+
+
+/* Stock Level Display */
+.stock-level {
+  text-align: center;
+}
+
+#stockDisplay {
+  font-size: 4rem;
+  font-weight: bold;
+  color: var(--stock-color);
+  margin: 0;
+  padding: 1rem;
+  background-color: #e8f5e9;
+  border-radius: var(--border-radius);
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+  
+  main {
+    margin: 1rem auto;
+  }
+
+  section {
+    padding: 1rem;
+  }
+  
+  .scenarios {
+    flex-direction: column;
+  }
+
+  #stockDisplay {
+    font-size: 3rem;
   }
 }
