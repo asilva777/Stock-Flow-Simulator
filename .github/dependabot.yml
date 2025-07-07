@@ -1,0 +1,24 @@
+# 📦 Dependabot Version Updates Configuration
+# This file configures automated version updates via GitHub Dependabot.
+# Specify which package ecosystems to monitor and where your package manifests are located.
+
+# 🌐 Full documentation:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "npm" # Replace with your ecosystem (e.g., "npm", "maven", "composer", "pip", "docker", etc.)
+    directory: "/"            # Root directory containing the package manifest file(s)
+    schedule:
+      interval: "weekly"      # Options: "daily", "weekly", "monthly"
+    open-pull-requests-limit: 5     # Optional: Maximum number of open PRs created by Dependabot
+    rebase-strategy: "auto"         # Optional: "auto", "manual", or "disabled"
+
+# ✅ Example package-ecosystem values:
+# - npm: for JavaScript/Node.js projects using package.json
+# - pip: for Python projects with requirements.txt or setup.py
+# - docker: for Dockerfiles
+# - composer: for PHP projects
+# - maven or gradle: for Java projects
+
+# 💡 Tip: You can define multiple update blocks for different directories or ecosystems.
