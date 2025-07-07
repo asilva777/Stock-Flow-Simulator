@@ -1,87 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stock and Flow Simulator – LGU Finance</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json"> <!-- PWA manifest -->
-  <link rel="icon" href="favicon.ico">
-  <meta name="theme-color" content="#00796b">
-</head>
-<body>
-  <header>
-    <h1>🌱 Stock and Flow Simulator</h1>
-    <p>Visualize how LGU reserves grow or shrink through local taxes, IRA, and expenditures</p>
-  </header>
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;Dynamic Stock &amp; Flow Simulator&lt;/title&gt;
 
-  <main>
-    <section class="intro">
-      <h2>About this Tool</h2>
-      <p>This dynamic tool blends systems thinking and stock & flow diagrams to help LGUs explore the impact of policy choices on reserves over time. Adjust inflow, outflow, or run scenarios and watch how reserves change dynamically.</p>
-    </section>
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
+  &lt;link rel=&quot;manifest&quot; href=&quot;manifest.json&quot;&gt;
+  &lt;link rel=&quot;icon&quot; href=&quot;favicon.ico&quot;&gt;
+  &lt;meta name=&quot;theme-color&quot; content=&quot;#0D47A1&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;h1&gt;🌱 Dynamic Stock &amp; Flow Simulator&lt;/h1&gt;
+    &lt;p&gt;Model financial systems by customizing inflows, outflows, and scenarios.&lt;/p&gt;
+  &lt;/header&gt;
 
-    <section class="diagram" aria-label="Stock and flow diagram">
-      <h2>📦 LGU Financial System</h2>
-      <svg id="diagram" viewBox="0 0 600 300">
-        <!-- Stock -->
-        <rect x="250" y="120" width="100" height="60" rx="8" ry="8" fill="#4caf50"></rect>
-        <text x="300" y="155" text-anchor="middle" fill="#fff" font-size="14">Reserves</text>
-
-        <!-- Inflow arrow -->
-        <line x1="130" y1="150" x2="250" y2="150" stroke="#2196f3" stroke-width="4" marker-end="url(#arrowhead)"></line>
-        <text x="190" y="140" text-anchor="middle" fill="#2196f3">Local Tax & IRA</text>
-
-        <!-- Outflow arrow -->
-        <line x1="350" y1="150" x2="470" y2="150" stroke="#f44336" stroke-width="4" marker-end="url(#arrowhead)"></line>
-        <text x="410" y="140" text-anchor="middle" fill="#f44336">Expenditures & Debt</text>
-
-        <defs>
-          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
-            <polygon points="0 0, 10 3.5, 0 7" fill="black" />
-          </marker>
-        </defs>
-      </svg>
-    </section>
-
-    <section class="controls">
-      <h2>⚙ Adjust Financial Parameters</h2>
-      <label for="inflowSlider">Inflow Rate (%): <span id="inflowValue">50</span></label>
-      <input type="range" id="inflowSlider" min="0" max="100" value="50">
-
-      <label for="outflowSlider">Outflow Rate (%): <span id="outflowValue">40</span></label>
-      <input type="range" id="outflowSlider" min="0" max="100" value="40">
-
-      <label for="shockInput">One-time Shock Amount:</label>
-      <input type="number" id="shockInput" min="0" placeholder="e.g., 10">
-      <button id="applyShockBtn">⚡ Apply Shock</button>
-    </section>
-
-    <section class="scenarios">
-      <h2>🧪 Try a Scenario</h2>
-      <button class="scenario-btn" id="disasterBtn">🌪 Disaster Shock</button>
-      <button class="scenario-btn" id="boomBtn">📈 Business Boom</button>
-      <button class="scenario-btn" id="taxBtn">🏛 New Tax Policy</button>
-    </section>
-
-    <section class="stock-level">
-      <h2>📊 LGU Reserves Over Time</h2>
-      <p id="stockDisplay">100</p>
-    </section>
-  </main>
-
-  <footer>
-    <p>&copy; 2025 Stock and Flow Simulator | Built for Systems Thinking in Local Government Finance</p>
-  </footer>
-
-  <script src="script.js" defer></script>
-  <script>
-    // Service worker registration for PWA
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(reg => console.log('Service Worker registered:', reg.scope))
-        .catch(err => console.error('Service Worker registration failed:', err));
-    }
-  </script>
-</body>
-</html>
+  &lt;main&gt;
+    &lt;section class=&quot;diagram&quot; aria-label=&quot;Stock and flow diagram&quot;&gt;
+      &lt;h2&gt;📦 Financial System Model&lt;/h2&gt;
+      &lt;svg id=&quot;diagram&quot; viewBox=&quot;0 0 600 300&quot;&gt;
+        &lt;rect class=&quot;stock-rect&quot; x=&quot;250&quot; y=&quot;120&quot; width=&quot;100&quot; height=&quot;60&quot; rx=&quot;8&quot; ry=&quot;8&quot;&gt;&lt;/rect&gt;
+        &lt;text class=&quot;stock-text&quot; x=&quot;300&quot; y=&quot;155&quot; text-anchor=&quot;middle&quot; font-size=&quot;14&quot;&gt;Reserves&lt;/text&gt;
