@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dynamic Stock & Flow Simulator</title>
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Stock &amp; Flow Simulator</title>
 
   <!-- SEO & Social Sharing -->
-  <meta name="description" content="Simulate financial systems with customizable inflows, outflows, and scenarios." />
-  <meta property="og:title" content="Dynamic Stock & Flow Simulator" />
-  <meta property="og:description" content="Model financial systems dynamically." />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="preview.png" />
+  <meta name="description" content="Simulate financial systems with customizable inflows, outflows, and scenarios.">
+  <meta property="og:title" content="Dynamic Stock &amp; Flow Simulator">
+  <meta property="og:description" content="Model financial systems dynamically.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="preview.png">
 
   <!-- Styles & Manifest -->
-  <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="favicon.ico" />
-  <meta name="theme-color" content="#0D47A1" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="favicon.ico">
+  <meta name="theme-color" content="#0D47A1">
+
+  <!-- Chart.js for data visualization -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <header role="banner">
-    <h1>🌱 Dynamic Stock & Flow Simulator</h1>
+    <h1>Dynamic Stock &amp; Flow Simulator</h1>
     <p>Model financial systems by customizing inflows, outflows, and scenarios.</p>
   </header>
 
@@ -32,22 +34,88 @@
         <desc id="diagramDesc">Visual representation of reserves and their flows.</desc>
         <rect class="stock-rect" x="250" y="120" width="100" height="60" rx="8" ry="8"></rect>
         <text class="stock-text" x="300" y="155" text-anchor="middle" font-size="14">Reserves</text>
+        <text id="inflowTextSVG" class="inflow-text" x="150" y="155" text-anchor="middle" font-size="14">Inflow</text>
+        <text id="outflowTextSVG" class="outflow-text" x="450" y="155" text-anchor="middle" font-size="14">Outflow</text>
       </svg>
     </section>
 
     <section class="controls" aria-label="Simulation Controls">
       <h2>⚙️ Controls</h2>
-      <p>Adjust parameters to simulate different financial scenarios.</p>
-      <!-- Placeholder for future controls -->
-      <button id="startSim">Start Simulation</button>
+      <div class="label-control">
+        <label for="inflowLabelInput">Inflow Label:</label>
+        <input type="text" id="inflowLabelInput" aria-label="Inflow label input">
+      </div>
+      <div class="label-control">
+        <label for="outflowLabelInput">Outflow Label:</label>
+        <input type="text" id="outflowLabelInput" aria-label="Outflow label input">
+      </div>
+      <div class="label-control">
+        <label for="inflowSlider">Inflow Rate:</label>
+        <input type="range" id="inflowSlider" min="0" max="100" value="50" aria-label="Inflow rate slider">
+        <span id="inflowValue">50</span>
+      </div>
+      <div class="label-control">
+        <label for="outflowSlider">Outflow Rate:</label>
+        <input type="range" id="outflowSlider" min="0" max="100" value="50" aria-label="Outflow rate slider">
+        <span id="outflowValue">50</span>
+      </div>
+      <div class="label-control">
+        <label for="shockInput">Apply Shock:</label>
+        <input type="number" id="shockInput" aria-label="Shock input value">
+        <button id="applyShockBtn" aria-label="Apply shock button">Apply Shock</button>
+      </div>
+      <div class="label-control">
+        <label for="intervalInput">Simulation Interval (ms):</label>
+        <input type="number" id="intervalInput" value="1000" aria-label="Simulation interval input">
+        <button id="pauseResumeBtn" aria-label="Pause or resume simulation">Pause</button>
+      </div>
+    </section>
+
+    <section class="scenarios" aria-label="Scenario Controls">
+      <h2>🎯 Scenarios</h2>
+      <div class="scenario-control">
+        <input type="text" id="scenario1Label" value="Disaster" aria-label="Scenario 1 label">
+        <button id="scenario1Btn" class="scenario-btn" aria-label="Trigger scenario 1">Disaster</button>
+      </div>
+      <div class="scenario-control">
+        <input type="text" id="scenario2Label" value="Boom" aria-label="Scenario 2 label">
+        <button id="scenario2Btn" class="scenario-btn" aria-label="Trigger scenario 2">Boom</button>
+      </div>
+      <div class="scenario-control">
+        <input type="text" id="scenario3Label" value="Policy" aria-label="Scenario 3 label">
+        <button id="scenario3Btn" class="scenario-btn" aria-label="Trigger scenario 3">Policy</button>
+      </div>
+    </section>
+
+    <section class="stock-level" aria-label="Stock Display">
+      <h2>📊 Stock Level</h2>
+      <p id="stockDisplay" aria-live="polite">1000</p>
+    </section>
+
+    <section class="chart-section" aria-label="Stock Chart">
+      <h2>📈 Stock Over Time</h2>
+      <canvas id="stockChart" width="600" height="300" aria-label="Stock chart canvas"></canvas>
+      <button id="exportCSVBtn" aria-label="Export stock data as CSV">Export CSV</button>
+    </section>
+
+    <section class="language-section" aria-label="Language Selection">
+      <h2>🌐 Language</h2>
+      <select id="languageSelect" aria-label="Select language">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+      </select>
     </section>
   </main>
 
   <footer role="contentinfo">
-    <p>&copy; 2025 | ASilva Innovations. All rights reserved.</p>
+    <p>© 2025 Cognitio+. All rights reserved.</p>
   </footer>
 
+  <!-- Toast Notification -->
+  <div id="toast" role="alert" aria-live="assertive" style="display:none;"></div>
+
   <!-- Scripts -->
-  <script src="script.js" defer></script>
+  <script src="script.js" defer=""></script>
 </body>
 </html>
