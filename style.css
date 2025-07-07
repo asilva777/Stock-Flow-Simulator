@@ -1,19 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto+Condensed:wght@400;700&display=swap');
+
 /* General Body & Typography */
 :root {
-  --primary-color: #00796b; /* Teal */
-  --inflow-color: #2196f3;  /* Blue */
-  --outflow-color: #f44336; /* Red */
-  --stock-color: #4caf50;   /* Green */
-  --background-color: #f4f6f8;
+  --primary-color: #0D47A1; /* Dark Blue */
+  --inflow-color: #42A5F5;  /* Light Blue */
+  --outflow-color: #f44336; /* Red (kept for contrast) */
+  --stock-color: #FFC107;   /* Golden Yellow */
+  --accent-color: #FFA000;  /* Amber for buttons */
+  --background-color: #f0f4f8; /* Lighter blue-gray */
   --card-background: #ffffff;
-  --text-color: #333;
+  --text-color: #212121;
   --light-text-color: #fff;
   --border-radius: 8px;
   --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Roboto Condensed', sans-serif;
   line-height: 1.6;
   margin: 0;
   background-color: var(--background-color);
@@ -33,13 +36,15 @@ header {
 }
 
 header h1 {
+  font-family: 'Montserrat', sans-serif;
   margin: 0;
-  font-size: 2rem;
+  font-size: 2.2rem;
 }
 
 header p {
   margin: 0.5rem 0 0;
   opacity: 0.9;
+  font-weight: 400;
 }
 
 footer {
@@ -70,6 +75,7 @@ section {
 }
 
 h2 {
+  font-family: 'Montserrat', sans-serif;
   margin-top: 0;
   border-bottom: 2px solid var(--primary-color);
   padding-bottom: 0.5rem;
@@ -82,6 +88,15 @@ h2 {
   width: 100%;
   height: auto;
 }
+
+/* Update SVG colors to match new theme */
+#diagram .stock-rect { fill: var(--stock-color); }
+#diagram .inflow-arrow { stroke: var(--inflow-color); }
+#diagram .inflow-text { fill: var(--inflow-color); }
+#diagram .outflow-arrow { stroke: var(--outflow-color); }
+#diagram .outflow-text { fill: var(--outflow-color); }
+#diagram .stock-text { fill: var(--text-color); }
+
 
 /* Controls Section */
 .controls {
@@ -99,7 +114,7 @@ h2 {
 .controls span {
   font-weight: normal;
   color: var(--primary-color);
-  background: #e0f2f1;
+  background: #e3f2fd; /* Light blue background */
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   align-self: flex-start;
@@ -155,6 +170,7 @@ input[type="number"] {
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
+  font-family: 'Roboto Condensed', sans-serif;
   flex-grow: 1;
 }
 
@@ -165,7 +181,8 @@ button, .scenario-btn {
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
-  font-weight: bold;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 700;
 }
 
 button:hover, .scenario-btn:hover {
@@ -173,11 +190,11 @@ button:hover, .scenario-btn:hover {
 }
 
 #applyShockBtn {
-  background-color: #ff9800; /* Orange */
-  color: var(--light-text-color);
+  background-color: var(--accent-color);
+  color: var(--text-color);
 }
 #applyShockBtn:hover {
-    background-color: #f57c00;
+    background-color: #FFB300;
 }
 
 
@@ -207,25 +224,27 @@ button:hover, .scenario-btn:hover {
 
 #stockDisplay {
   font-size: 4rem;
-  font-weight: bold;
-  color: var(--stock-color);
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  color: var(--text-color);
   margin: 0;
   padding: 1rem;
-  background-color: #e8f5e9;
+  background-color: #FFF8E1; /* Light yellow background */
+  border: 2px solid var(--stock-color);
   border-radius: var(--border-radius);
   animation: pulse 2s infinite ease-in-out;
 }
 
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.02); }
-    100% { transform: scale(1); }
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
+    70% { transform: scale(1.02); box-shadow: 0 0 10px 10px rgba(255, 193, 7, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   header h1 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
   }
   
   main {
