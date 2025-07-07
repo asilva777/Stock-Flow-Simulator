@@ -3,17 +3,18 @@ body {
   margin: 0;
   color: #333;
   background: #f9fafb;
+  line-height: 1.6;
 }
 
 header, footer {
   text-align: center;
   background: #0000FF;
-  color: #fff;
+  color: #ffffff;
   padding: 1rem;
 }
 
 h1 { margin: 0; font-size: 1.8rem; }
-h2 { margin-bottom: 0.5rem; }
+h2 { margin: 0.5rem 0; }
 
 .container {
   max-width: 900px;
@@ -21,11 +22,15 @@ h2 { margin-bottom: 0.5rem; }
   padding: 1rem;
 }
 
-.guide {
+.instructions {
   background: #0000FF;
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;
+}
+
+.instructions ol {
+  padding-left: 1.2rem;
 }
 
 .controls {
@@ -37,9 +42,7 @@ h2 { margin-bottom: 0.5rem; }
   padding: 1rem;
 }
 
-.controls label {
-  font-weight: 500;
-}
+.controls label { font-weight: 500; }
 
 .controls input[type="range"], 
 .controls input[type="number"] {
@@ -47,8 +50,8 @@ h2 { margin-bottom: 0.5rem; }
 }
 
 button {
-  background: #0000FF;
-  color: #fff;
+  background:#0000FF;
+  color: #ffffff;
   border: none;
   padding: 0.6rem 1rem;
   font-size: 1rem;
