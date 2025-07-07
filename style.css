@@ -1,15 +1,13 @@
-/* Reset & base styles */
 body {
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
   color: #333;
   background: #f9fafb;
-  line-height: 1.6;
 }
 
 header, footer {
   text-align: center;
-  background: #00796b;
+  background: #0000FF;
   color: #fff;
   padding: 1rem;
 }
@@ -18,13 +16,13 @@ h1 { margin: 0; font-size: 1.8rem; }
 h2 { margin-bottom: 0.5rem; }
 
 .container {
-  max-width: 800px;
+  max-width: 900px;
   margin: auto;
   padding: 1rem;
 }
 
 .guide {
-  background: #e0f2f1;
+  background: #0000FF;
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;
@@ -33,7 +31,7 @@ h2 { margin-bottom: 0.5rem; }
 .controls {
   display: grid;
   gap: 1rem;
-  background: #ffffff;
+  background: #fff;
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 1rem;
@@ -43,14 +41,13 @@ h2 { margin-bottom: 0.5rem; }
   font-weight: 500;
 }
 
-.controls input[type="range"],
+.controls input[type="range"], 
 .controls input[type="number"] {
   width: 100%;
-  margin-top: 0.3rem;
 }
 
 button {
-  background: #00796b;
+  background: #0000FF;
   color: #fff;
   border: none;
   padding: 0.6rem 1rem;
@@ -61,7 +58,7 @@ button {
 }
 
 button:hover, button:focus {
-  background: #004d40;
+  background: #0000FF;
 }
 
 .chart {
@@ -72,9 +69,20 @@ button:hover, button:focus {
 svg {
   max-width: 100%;
   height: auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-/* Responsive adjustments */
+.scenarios {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.scenario-btn {
+  margin: 0.3rem;
+}
+
 @media (max-width: 600px) {
   .controls {
     grid-template-columns: 1fr;
