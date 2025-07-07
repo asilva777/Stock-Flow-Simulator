@@ -1,0 +1,23 @@
+&lt;immersive type=&quot;code&quot; title=&quot;manifest.json&quot;&gt;
+```json
+{
+  &quot;name&quot;: &quot;Dynamic Stock &amp; Flow Simulator&quot;,
+  &quot;short_name&quot;: &quot;StockSim&quot;,
+  &quot;description&quot;: &quot;A PWA for modeling financial systems with customizable labels.&quot;,
+  &quot;start_url&quot;: &quot;.&quot;,
+  &quot;display&quot;: &quot;standalone&quot;,
+  &quot;background_color&quot;: &quot;#f0f4f8&quot;,
+  &quot;theme_color&quot;: &quot;#0D47A1&quot;,
+  &quot;icons&quot;: [
+    {
+      &quot;src&quot;: &quot;icon-192.png&quot;,
+      &quot;type&quot;: &quot;image/png&quot;,
+      &quot;sizes&quot;: &quot;192x192&quot;
+    },
+    {
+      &quot;src&quot;: &quot;icon-512.png&quot;,
+      &quot;type&quot;: &quot;image/png&quot;,
+      &quot;sizes&quot;: &quot;512x512&quot;
+    }
+  ]
+}
