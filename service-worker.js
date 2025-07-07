@@ -6,39 +6,40 @@ const urlsToCache = [
   '/script.js',
   '/manifest.json',
   '/icon-192.png',
-  '/icon-512.png'
+  '/icon-512.png',
+  '/icon-1024.png',
+  '/chart.min.js'
 ];
 
-// Install event - cache essential assets
+// Install event: cache essential files
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       console.log('[ServiceWorker] Caching app shell');
       return cache.addAll(urlsToCache);
     })
   );
-  self.skipWaiting();
 });
 
-// Activate event - clean up old caches
+// Activate event: clean up old caches
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then(cacheNames =>
       Promise.all(
         cacheNames.map(cacheName => {
-          if (!cacheWhitelist.includes(cacheName)) {
-            console.log('[ServiceWorker] Deleting old cache:', cacheName);
+          if (cacheName !== CACHE_NAME) {
+            console.log('[ServiceWorker] Removing old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       )
     )
   );
-  self.clients.claim();
+  return self.clients.claim();
 });
 
-// Fetch event - stale-while-revalidate strategy
+// Fetch event: stale-while-revalidate strategy
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.open(CACHE_NAME).then(cache =>
@@ -48,10 +49,7 @@ self.addEventListener('fetch', event => {
             cache.put(event.request, networkResponse.clone());
           }
           return networkResponse;
-        }).catch(() => {
-          // Fallback to cache if network fails
-          return response;
-        });
+        }).catch(() => response); // fallback to cache if offline
         return response || fetchPromise;
       })
     )
