@@ -2,86 +2,57 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Stock–Flow Simulator</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stock–Flow Simulator: Visualize Financial Policies</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 </head>
 <body>
-  <div class="guide">
-    <strong>🧮 Quick Guide: Using the Stock and Flow Simulator</strong>
-    <ul>
-      <li><b>Purpose:</b> See how your LGU’s reserves (stock) change over time, based on decisions about income (<b>inflows</b>) and spending (<b>outflows</b>).</li>
-      <li><b>Step 1:</b> Adjust policy levers below (tax collection, annual spending, shocks).</li>
-      <li><b>Step 2:</b> Observe how reserves change. Try different scenarios!</li>
-    </ul>
-  </div>
+  <header>
+    <h1>Stock–Flow Simulator</h1>
+    <p>Visualize how policy choices affect financial reserves over time</p>
+  </header>
 
-  <h1>Stock–Flow Simulator</h1>
-  <div class="container">
-    <div id="tooltip" class="tooltip"></div>
-    <svg viewBox="0 0 800 300">
-      <defs>
-        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-          <polygon points="0 0,10 3.5,0 7" fill="#27ae60"/>
-        </marker>
-      </defs>
+  <main role="main" class="container">
+    <section class="guide">
+      <h2>Instructions</h2>
+      <p>Adjust inflows, outflows, and shocks below. The graph updates in real time to show how reserves change.</p>
+    </section>
 
-      <!-- Stocks -->
-      <rect class="stock" x="320" y="120" width="160" height="60" rx="10" ry="10" />
-      <text class="label" x="400" y="145" id="stockLabel">LGU Reserves</text>
-      <text class="label" x="400" y="170" id="stockValue">100.0</text>
+    <fieldset class="controls" aria-label="Simulation controls">
+      <legend>Policy Controls</legend>
+      
+      <label for="inflowSlider">Inflow Rate (%): 
+        <span id="inflowValue">50</span>
+      </label>
+      <input type="range" id="inflowSlider" min="0" max="100" value="50" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0">
+      
+      <label for="outflowSlider">Outflow Rate (%): 
+        <span id="outflowValue">40</span>
+      </label>
+      <input type="range" id="outflowSlider" min="0" max="100" value="40" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40" tabindex="0">
 
-      <!-- Inflow path -->
-      <line class="flow-arrow" x1="50" y1="150" x2="320" y2="150" data-tooltip="Income (Taxes, IRA, etc.) ↑" />
-      <text class="label" x="185" y="140" id="inflowLabel">Income: 5.0</text>
+      <label for="shockInput">One-time Shock Amount:</label>
+      <input type="number" id="shockInput" min="0" aria-describedby="shockDesc" placeholder="e.g., 10">
+      <span id="shockDesc">Enter a positive number. Invalid inputs will be ignored.</span>
+      
+      <button id="applyShockBtn" aria-label="Apply shock to reserves">
+        <i class="fas fa-bolt"></i> Apply Shock
+      </button>
+    </fieldset>
 
-      <!-- Outflow path -->
-      <line class="flow-arrow" x1="480" y1="150" x2="750" y2="150" data-tooltip="Spending (Salaries, Projects, etc.) ↓" />
-      <text class="label" x="615" y="140" id="outflowLabel">Spending: 3.0</text>
-    </svg>
+    <section class="chart" aria-label="Financial reserve chart">
+      <!-- Optimized SVG -->
+      <svg id="stockFlowChart" viewBox="0 0 600 300" role="img" aria-label="Stock and flow chart visualization">
+        <!-- Chart will render dynamically -->
+      </svg>
+    </section>
+  </main>
 
-    <div class="controls">
-      <div class="control">
-        <label for="inflowSlider">Base Income (₱M)</label>
-        <input type="range" id="inflowSlider" min="1" max="20" value="5">
-        <span class="control-value" id="inflowValue">5</span>
-      </div>
-      <div class="control">
-        <label for="outflowSlider">Base Spending (₱M)</label>
-        <input type="range" id="outflowSlider" min="1" max="20" value="3">
-        <span class="control-value" id="outflowValue">3</span>
-      </div>
-      <div class="control">
-        <label for="collectionSlider">Tax Collection Rate (%)</label>
-        <input type="range" id="collectionSlider" min="50" max="120" value="100">
-        <span class="control-value" id="collectionValue">100</span>
-      </div>
-      <div class="control">
-        <label for="spendGrowthSlider">Annual Spending Growth (%)</label>
-        <input type="range" id="spendGrowthSlider" min="-10" max="20" value="0">
-        <span class="control-value" id="spendGrowthValue">0</span>
-      </div>
-      <div class="control">
-        <label for="shockInput">One-Time Shock (₱M)</label>
-        <input type="number" id="shockInput" min="0" value="0" style="width:80px;">
-        <button id="applyShock">Apply</button>
-      </div>
-    </div>
+  <footer>
+    <p>&copy; 2025 Stock–Flow Simulator. Accessible & responsive demo.</p>
+  </footer>
 
-    <div class="readout">Current LGU Reserves: <span id="readoutStock">100.0</span> ₱M</div>
-    <div class="scenario-section">
-      <strong>🧪 Try Scenarios:</strong>
-      <div class="scenario-buttons">
-        <button onclick="window.simScenario('improveCollection')">Improve Collection by +10%</button>
-        <button onclick="window.simScenario('iraCut')">IRA Cut (Income -20%)</button>
-        <button onclick="window.simScenario('spendGrowth')">Spending grows +10%</button>
-        <button onclick="window.simScenario('disasterShock')">Apply Disaster Shock (₱50M)</button>
-      </div>
-    </div>
-    <div class="explore-note">
-      <p>🔎 <b>Explore:</b> Try small and large changes, and see how your reserves react. Notice any delays or sensitivities to your policy levers?</p>
-    </div>
-  </div>
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
