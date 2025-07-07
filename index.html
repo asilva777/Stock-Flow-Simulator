@@ -10,17 +10,17 @@
 <body>
   <header>
     <h1>Stock–Flow Simulator</h1>
-    <p>Visualize how policy choices affect financial reserves over time</p>
+    <p>Explore how policies and scenarios shape LGU reserves over time</p>
   </header>
 
   <main role="main" class="container">
     <section class="guide">
-      <h2>Instructions</h2>
-      <p>Adjust inflows, outflows, and shocks below. The graph updates in real time to show how reserves change.</p>
+      <h2>How to Use</h2>
+      <p>Adjust inflows, outflows, and apply shocks or predefined scenarios. Watch how your LGU’s reserves change over time in the chart below.</p>
     </section>
 
     <fieldset class="controls" aria-label="Simulation controls">
-      <legend>Policy Controls</legend>
+      <legend>Adjust Financial Parameters</legend>
       
       <label for="inflowSlider">Inflow Rate (%): 
         <span id="inflowValue">50</span>
@@ -33,24 +33,37 @@
       <input type="range" id="outflowSlider" min="0" max="100" value="40" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40" tabindex="0">
 
       <label for="shockInput">One-time Shock Amount:</label>
-      <input type="number" id="shockInput" min="0" aria-describedby="shockDesc" placeholder="e.g., 10">
-      <span id="shockDesc">Enter a positive number. Invalid inputs will be ignored.</span>
+      <input type="number" id="shockInput" min="0" placeholder="e.g., 10" aria-describedby="shockDesc">
+      <span id="shockDesc">Enter a positive number; negative inputs will be ignored.</span>
       
       <button id="applyShockBtn" aria-label="Apply shock to reserves">
         <i class="fas fa-bolt"></i> Apply Shock
       </button>
     </fieldset>
 
-    <section class="chart" aria-label="Financial reserve chart">
-      <!-- Optimized SVG -->
-      <svg id="stockFlowChart" viewBox="0 0 600 300" role="img" aria-label="Stock and flow chart visualization">
-        <!-- Chart will render dynamically -->
+    <section class="scenarios" aria-label="Scenarios">
+      <h2>Apply a Scenario</h2>
+      <button class="scenario-btn" id="disasterBtn" aria-label="Disaster shock scenario">
+        🌪 Disaster Shock
+      </button>
+      <button class="scenario-btn" id="boomBtn" aria-label="Business boom scenario">
+        📈 Business Boom
+      </button>
+      <button class="scenario-btn" id="taxBtn" aria-label="New tax policy scenario">
+        🏛 New Tax Policy
+      </button>
+    </section>
+
+    <section class="chart" aria-label="Stock and flow visualization">
+      <h2>Reserves Over Time</h2>
+      <svg id="stockFlowChart" viewBox="0 0 600 300" role="img" aria-label="Chart of LGU reserves">
+        <!-- Chart bars generated dynamically -->
       </svg>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 Stock–Flow Simulator. Accessible & responsive demo.</p>
+    <p>&copy; 2025 Stock–Flow Simulator | Accessible & responsive</p>
   </footer>
 
   <script src="script.js" defer></script>
