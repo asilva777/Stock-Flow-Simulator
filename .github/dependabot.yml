@@ -20,5 +20,4 @@ updates:
 # - docker: for Dockerfiles
 # - composer: for PHP projects
 # - maven or gradle: for Java projects
-
 # 💡 Tip: You can define multiple update blocks for different directories or ecosystems.
