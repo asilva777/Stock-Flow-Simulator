@@ -1,24 +1,53 @@
-&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-  &lt;meta charset=&quot;UTF-8&quot; /&gt;
-  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-  &lt;title&gt;Dynamic Stock &amp; Flow Simulator&lt;/title&gt;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dynamic Stock & Flow Simulator</title>
 
-  &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
-  &lt;link rel=&quot;manifest&quot; href=&quot;manifest.json&quot;&gt;
-  &lt;link rel=&quot;icon&quot; href=&quot;favicon.ico&quot;&gt;
-  &lt;meta name=&quot;theme-color&quot; content=&quot;#0D47A1&quot;&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;header&gt;
-    &lt;h1&gt;🌱 Dynamic Stock &amp; Flow Simulator&lt;/h1&gt;
-    &lt;p&gt;Model financial systems by customizing inflows, outflows, and scenarios.&lt;/p&gt;
-  &lt;/header&gt;
+  <!-- SEO & Social Sharing -->
+  <meta name="description" content="Simulate financial systems with customizable inflows, outflows, and scenarios." />
+  <meta property="og:title" content="Dynamic Stock & Flow Simulator" />
+  <meta property="og:description" content="Model financial systems dynamically." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="preview.png" />
 
-  &lt;main&gt;
-    &lt;section class=&quot;diagram&quot; aria-label=&quot;Stock and flow diagram&quot;&gt;
-      &lt;h2&gt;📦 Financial System Model&lt;/h2&gt;
-      &lt;svg id=&quot;diagram&quot; viewBox=&quot;0 0 600 300&quot;&gt;
-        &lt;rect class=&quot;stock-rect&quot; x=&quot;250&quot; y=&quot;120&quot; width=&quot;100&quot; height=&quot;60&quot; rx=&quot;8&quot; ry=&quot;8&quot;&gt;&lt;/rect&gt;
-        &lt;text class=&quot;stock-text&quot; x=&quot;300&quot; y=&quot;155&quot; text-anchor=&quot;middle&quot; font-size=&quot;14&quot;&gt;Reserves&lt;/text&gt;
+  <!-- Styles & Manifest -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="favicon.ico" />
+  <meta name="theme-color" content="#0D47A1" />
+</head>
+<body>
+  <header role="banner">
+    <h1>🌱 Dynamic Stock & Flow Simulator</h1>
+    <p>Model financial systems by customizing inflows, outflows, and scenarios.</p>
+  </header>
+
+  <main role="main">
+    <section class="diagram" aria-label="Stock and flow diagram">
+      <h2>📦 Financial System Model</h2>
+      <svg id="diagram" viewBox="0 0 600 300" role="img" aria-labelledby="diagramTitle diagramDesc">
+        <title id="diagramTitle">Stock and Flow Diagram</title>
+        <desc id="diagramDesc">Visual representation of reserves and their flows.</desc>
+        <rect class="stock-rect" x="250" y="120" width="100" height="60" rx="8" ry="8"></rect>
+        <text class="stock-text" x="300" y="155" text-anchor="middle" font-size="14">Reserves</text>
+      </svg>
+    </section>
+
+    <section class="controls" aria-label="Simulation Controls">
+      <h2>⚙️ Controls</h2>
+      <p>Adjust parameters to simulate different financial scenarios.</p>
+      <!-- Placeholder for future controls -->
+      <button id="startSim">Start Simulation</button>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <p>&copy; 2025 Cognitio+. All rights reserved.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js" defer></script>
+</body>
+</html>
