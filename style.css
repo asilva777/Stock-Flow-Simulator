@@ -1,8 +1,8 @@
 body {
   font-family: 'Montserrat Classic', Oswald;
   margin: 0;
-  color: #333;
-  background: #f9fafb;
+  color:#ffffff;
+  background:#0000FF;
   line-height: 1.6;
 }
 
@@ -24,6 +24,7 @@ h2 { margin: 0.5rem 0; }
 
 .instructions {
   background: #0000FF;
+  color: #ffffff;
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;
@@ -62,11 +63,14 @@ button {
 
 button:hover, button:focus {
   background: #0000FF;
+  color: #ffffff;
 }
 
 .chart {
   margin-top: 2rem;
   text-align: center;
+  background: #0000FF;
+  color: #ffffff;
 }
 
 svg {
