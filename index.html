@@ -3,71 +3,85 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stock–Flow Simulator: Visualize Financial Policies</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <title>Stock and Flow Simulator – Local Government Finance</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json"> <!-- PWA manifest -->
+  <link rel="icon" href="favicon.ico">
+  <meta name="theme-color" content="#000FFF">
 </head>
 <body>
   <header>
-    <h1>Stock–Flow Simulator</h1>
-    <p>Think of it as a flight simulator for LGU finance: test policy choices & see what might happen.</p>
+    <h1>🌱 Stock and Flow Simulator</h1>
+    <p>Visualize how local government reserves grow or shrink through local taxes, IRA, and expenditures</p>
   </header>
 
-  <main role="main" class="container">
-    <section class="instructions">
-      <h2>How to Use</h2>
-      <ol>
-        <li><strong>Step 1: Explore on the sliders and buttons:</strong><br>
-        Use the sliders & buttons below to test decisions.</li>
-        <li><strong>Step 2: Understand the Elements</strong><br>
-        <strong>Stock:</strong> accumulated reserves<br>
-        <strong>Inflows:</strong> money in (taxes, IRA)<br>
-        <strong>Outflows:</strong> money out (expenses, debt)</li>
-        <li><strong>Step 3: Adjust Rates</strong><br>
-        Move sliders, apply shocks, or run scenarios.</li>
-        <li><strong>Step 4: Observe</strong><br>
-        Watch how the chart changes over time.</li>
-        <li><strong>Step 5: Try Scenarios</strong><br>
-        Disaster shock, business boom, or tax reform.</li>
-        <li><strong>Step 6: Reflect</strong><br>
-        Discuss: what had biggest impact? what surprised us?</li>
-      </ol>
+  <main>
+    <section class="intro">
+      <h2>About this Tool</h2>
+      <p>This dynamic tool blends systems thinking and stock & flow diagrams to help LGUs explore the impact of policy choices on reserves over time. Adjust inflow, outflow, or run scenarios and watch how reserves change dynamically.</p>
     </section>
 
-    <fieldset class="controls" aria-label="Simulation controls">
-      <legend>Adjust Financial Parameters</legend>
+    <section class="diagram" aria-label="Stock and flow diagram">
+      <h2>Local Government Financial System</h2>
+      <svg id="diagram" viewBox="0 0 600 300">
+        <!-- Stock -->
+        <rect x="250" y="120" width="100" height="60" rx="8" ry="8" fill="#4caf50"></rect>
+        <text x="300" y="155" text-anchor="middle" fill="#fff" font-size="14">Reserves</text>
+
+        <!-- Inflow arrow -->
+        <line x1="130" y1="150" x2="250" y2="150" stroke="#2196f3" stroke-width="4" marker-end="url(#arrowhead)"></line>
+        <text x="190" y="140" text-anchor="middle" fill="#2196f3">Local Tax & IRA</text>
+
+        <!-- Outflow arrow -->
+        <line x1="350" y1="150" x2="470" y2="150" stroke="#f44336" stroke-width="4" marker-end="url(#arrowhead)"></line>
+        <text x="410" y="140" text-anchor="middle" fill="#f44336">Expenditures & Debt</text>
+
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="black" />
+          </marker>
+        </defs>
+      </svg>
+    </section>
+
+    <section class="controls">
+      <h2>⚙ Adjust Financial Parameters</h2>
       <label for="inflowSlider">Inflow Rate (%): <span id="inflowValue">50</span></label>
-      <input type="range" id="inflowSlider" min="0" max="100" value="50" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+      <input type="range" id="inflowSlider" min="0" max="100" value="50">
 
       <label for="outflowSlider">Outflow Rate (%): <span id="outflowValue">40</span></label>
-      <input type="range" id="outflowSlider" min="0" max="100" value="40" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40">
+      <input type="range" id="outflowSlider" min="0" max="100" value="40">
 
       <label for="shockInput">One-time Shock Amount:</label>
       <input type="number" id="shockInput" min="0" placeholder="e.g., 10">
-      <button id="applyShockBtn" aria-label="Apply shock to reserves">
-        <i class="fas fa-bolt"></i> Apply Shock
-      </button>
-    </fieldset>
-
-    <section class="scenarios" aria-label="Scenarios">
-      <h2>Try a Scenario</h2>
-      <button class="scenario-btn" id="disasterBtn">Disaster Shock</button>
-      <button class="scenario-btn" id="boomBtn">Business Boom</button>
-      <button class="scenario-btn" id="taxBtn">New Tax Policy</button>
+      <button id="applyShockBtn">⚡ Apply Shock</button>
     </section>
 
-    <section class="chart" aria-label="Visualization of reserves over time">
-      <h2>Reserves Over Time</h2>
-      <svg id="stockFlowChart" viewBox="0 0 600 300" role="img" aria-label="Chart of LGU reserves">
-        <!-- bars drawn by JS -->
-      </svg>
+    <section class="scenarios">
+      <h2>🧪 Try a Scenario</h2>
+      <button class="scenario-btn" id="disasterBtn">🌪 Disaster Shock</button>
+      <button class="scenario-btn" id="boomBtn">📈 Business Boom</button>
+      <button class="scenario-btn" id="taxBtn">🏛 New Tax Policy</button>
+    </section>
+
+    <section class="stock-level">
+      <h2>📊 LGU Reserves Over Time</h2>
+      <p id="stockDisplay">100</p>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2025 Stock–Flow Simulator | ASilva Innovations</p>
+    <p>&copy; 2025 Stock and Flow Simulator | Built for Systems Thinking in Local Government Finance</p>
   </footer>
 
   <script src="script.js" defer></script>
+  <script>
+    // Service worker registration for PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log('Service Worker registered:', reg.scope))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    }
+  </script>
 </body>
 </html>
