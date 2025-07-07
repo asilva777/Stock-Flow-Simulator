@@ -6,7 +6,6 @@ const inflowValue = document.getElementById('inflowValue');
 const outflowValue = document.getElementById('outflowValue');
 const svg = document.getElementById('stockFlowChart');
 
-// Scenario buttons
 const disasterBtn = document.getElementById('disasterBtn');
 const boomBtn = document.getElementById('boomBtn');
 const taxBtn = document.getElementById('taxBtn');
@@ -14,7 +13,7 @@ const taxBtn = document.getElementById('taxBtn');
 let reserves = 100;
 let history = [];
 
-// Update labels
+// update labels
 inflowSlider.addEventListener('input', () => {
   inflowValue.textContent = inflowSlider.value;
 });
@@ -22,7 +21,7 @@ outflowSlider.addEventListener('input', () => {
   outflowValue.textContent = outflowSlider.value;
 });
 
-// Apply shock
+// apply shock
 applyShockBtn.addEventListener('click', () => {
   const shock = parseFloat(shockInput.value);
   if (!isNaN(shock) && shock >= 0) {
@@ -35,16 +34,16 @@ applyShockBtn.addEventListener('click', () => {
   }
 });
 
-// Scenario actions
+// scenarios
 disasterBtn.addEventListener('click', () => {
-  reserves -= 20; // sudden cost
+  reserves -= 20;
   if (reserves < 0) reserves = 0;
   addToHistory(reserves);
   renderChart();
 });
 
 boomBtn.addEventListener('click', () => {
-  reserves += 15; // sudden revenue
+  reserves += 15;
   addToHistory(reserves);
   renderChart();
 });
@@ -54,13 +53,7 @@ taxBtn.addEventListener('click', () => {
   inflowValue.textContent = inflowSlider.value;
 });
 
-// Add to history
-function addToHistory(value) {
-  history.push(value);
-  if (history.length > 30) history.shift();
-}
-
-// Simulate each step
+// update reserves each second
 function simulateStep() {
   const inflow = parseFloat(inflowSlider.value);
   const outflow = parseFloat(outflowSlider.value);
@@ -70,7 +63,7 @@ function simulateStep() {
   renderChart();
 }
 
-// Render dynamic bar chart
+// draw chart
 function renderChart() {
   svg.innerHTML = '';
   history.forEach((v, i) => {
@@ -85,9 +78,15 @@ function renderChart() {
   });
 }
 
-// Loop
+// add to history
+function addToHistory(value) {
+  history.push(value);
+  if (history.length > 30) history.shift();
+}
+
+// loop
 setInterval(simulateStep, 1000);
 
-// Init
+// init
 addToHistory(reserves);
 renderChart();
