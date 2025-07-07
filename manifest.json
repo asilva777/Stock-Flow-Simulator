@@ -1,23 +1,59 @@
-&lt;immersive type=&quot;code&quot; title=&quot;manifest.json&quot;&gt;
-```json
 {
-  &quot;name&quot;: &quot;Dynamic Stock &amp; Flow Simulator&quot;,
-  &quot;short_name&quot;: &quot;StockSim&quot;,
-  &quot;description&quot;: &quot;A PWA for modeling financial systems with customizable labels.&quot;,
-  &quot;start_url&quot;: &quot;.&quot;,
-  &quot;display&quot;: &quot;standalone&quot;,
-  &quot;background_color&quot;: &quot;#f0f4f8&quot;,
-  &quot;theme_color&quot;: &quot;#0D47A1&quot;,
-  &quot;icons&quot;: [
+  "name": "Dynamic Stock & Flow Simulator",
+  "short_name": "StockSim",
+  "description": "A PWA for modeling financial systems with customizable labels.",
+  "start_url": ".",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f0f4f8",
+  "theme_color": "#0D47A1",
+  "lang": "en",
+  "categories": [
+    "finance",
+    "education",
+    "productivity"
+  ],
+  "icons": [
     {
-      &quot;src&quot;: &quot;icon-192.png&quot;,
-      &quot;type&quot;: &quot;image/png&quot;,
-      &quot;sizes&quot;: &quot;192x192&quot;
+      "src": "icon-72.png",
+      "type": "image/png",
+      "sizes": "72x72"
     },
     {
-      &quot;src&quot;: &quot;icon-512.png&quot;,
-      &quot;type&quot;: &quot;image/png&quot;,
-      &quot;sizes&quot;: &quot;512x512&quot;
+      "src": "icon-96.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "icon-128.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    },
+    {
+      "src": "icon-144.png",
+      "type": "image/png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "icon-152.png",
+      "type": "image/png",
+      "sizes": "152x152"
+    },
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-384.png",
+      "type": "image/png",
+      "sizes": "384x384"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ]
 }
