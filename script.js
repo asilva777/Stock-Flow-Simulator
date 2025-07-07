@@ -1,131 +1,163 @@
-// --- DOM ELEMENT REFERENCES ---
-// Labels
-const inflowLabelInput = document.getElementById('inflowLabelInput');
-const outflowLabelInput = document.getElementById('outflowLabelInput');
-const inflowTextSVG = document.getElementById('inflowTextSVG');
-const outflowTextSVG = document.getElementById('outflowTextSVG');
+// --- MODULE: StockFlowSimulator ---
+class StockFlowSimulator {
+  constructor() {
+    this.stock = parseFloat(localStorage.getItem('stock')) || 1000;
+    this.interval = parseInt(localStorage.getItem('interval')) || 1000;
+    this.running = true;
+    this.history = [];
 
-// Sliders & Shock
-const inflowSlider = document.getElementById('inflowSlider');
-const inflowValue = document.getElementById('inflowValue');
-const outflowSlider = document.getElementById('outflowSlider');
-const outflowValue = document.getElementById('outflowValue');
-const shockInput = document.getElementById('shockInput');
-const applyShockBtn = document.getElementById('applyShockBtn');
+    this.cacheElements();
+    this.bindEvents();
+    this.initUI();
+    this.startSimulation();
+  }
 
-// Scenarios
-const scenarioLabels = [
-  document.getElementById('scenario1Label'),
-  document.getElementById('scenario2Label'),
-  document.getElementById('scenario3Label')
-];
-const scenarioButtons = [
-  document.getElementById('scenario1Btn'),
-  document.getElementById('scenario2Btn'),
-  document.getElementById('scenario3Btn')
-];
+  cacheElements() {
+    this.inflowSlider = document.getElementById('inflowSlider');
+    this.outflowSlider = document.getElementById('outflowSlider');
+    this.inflowValue = document.getElementById('inflowValue');
+    this.outflowValue = document.getElementById('outflowValue');
+    this.stockDisplay = document.getElementById('stockDisplay');
+    this.stockRect = document.querySelector('#diagram .stock-rect');
+    this.shockInput = document.getElementById('shockInput');
+    this.applyShockBtn = document.getElementById('applyShockBtn');
+    this.pauseBtn = document.getElementById('pauseBtn');
+    this.intervalInput = document.getElementById('intervalInput');
+    this.toast = document.getElementById('toast');
+    this.chartCanvas = document.getElementById('stockChart');
+    this.exportBtn = document.getElementById('exportBtn');
+  }
 
-// Display
-const stockDisplay = document.getElementById('stockDisplay');
-const stockRect = document.querySelector('#diagram .stock-rect');
+  bindEvents() {
+    this.inflowSlider.addEventListener('input', () => this.updateSliderDisplay(this.inflowSlider, this.inflowValue));
+    this.outflowSlider.addEventListener('input', () => this.updateSliderDisplay(this.outflowSlider, this.outflowValue));
+    this.applyShockBtn.addEventListener('click', () => this.applyShock());
+    this.pauseBtn.addEventListener('click', () => this.toggleSimulation());
+    this.intervalInput.addEventListener('change', () => this.updateInterval());
+    this.exportBtn.addEventListener('click', () => this.exportData());
+  }
 
-// --- SIMULATION VARIABLES ---
-let stock = 1000;
-const SIMULATION_INTERVAL = 1000; // milliseconds
-const BASE_FLOW_VALUE = 50;
+  initUI() {
+    this.updateSliderDisplay(this.inflowSlider, this.inflowValue);
+    this.updateSliderDisplay(this.outflowSlider, this.outflowValue);
+    this.updateStockDisplay();
+    this.initChart();
+  }
 
-// --- UTILITY FUNCTIONS ---
-function updateSliderDisplay(slider, valueDisplay) {
-  valueDisplay.textContent = slider.value;
-}
+  updateSliderDisplay(slider, valueDisplay) {
+    valueDisplay.textContent = slider.value;
+  }
 
-function updateStockDisplay() {
-  stockDisplay.textContent = stock.toFixed(1);
-  const scale = Math.max(0.1, Math.min(2, stock / 1000));
-  stockRect.style.transformOrigin = 'center';
-  stockRect.style.transform = `scaleY(${scale})`;
-  stockRect.style.transition = 'transform 0.5s ease';
-}
+  updateStockDisplay() {
+    this.stockDisplay.textContent = this.stock.toFixed(1);
+    const scale = Math.max(0.1, Math.min(2, this.stock / 1000));
+    this.stockRect.style.transformOrigin = 'center';
+    this.stockRect.style.transform = `scaleY(${scale})`;
+    this.stockRect.style.transition = 'transform 0.5s ease';
+    localStorage.setItem('stock', this.stock);
+  }
 
-function applyShock(amount) {
-  if (!isNaN(amount)) {
-    stock += amount;
-    if (stock < 0) stock = 0;
-    updateStockDisplay();
+  applyShock() {
+    const shockAmount = parseFloat(this.shockInput.value);
+    if (!isNaN(shockAmount)) {
+      this.stock += shockAmount;
+      if (this.stock < 0) this.stock = 0;
+      this.updateStockDisplay();
+      this.showToast(`Shock of ${shockAmount} applied.`);
+      this.shockInput.value = '';
+    }
+  }
+
+  toggleSimulation() {
+    this.running = !this.running;
+    this.pauseBtn.textContent = this.running ? 'Pause' : 'Resume';
+  }
+
+  updateInterval() {
+    const newInterval = parseInt(this.intervalInput.value);
+    if (!isNaN(newInterval) && newInterval > 0) {
+      this.interval = newInterval;
+      localStorage.setItem('interval', this.interval);
+      clearInterval(this.simulationTimer);
+      this.startSimulation();
+      this.showToast(`Interval set to ${this.interval} ms`);
+    }
+  }
+
+  startSimulation() {
+    this.simulationTimer = setInterval(() => {
+      if (this.running) this.runSimulationStep();
+    }, this.interval);
+  }
+
+  runSimulationStep() {
+    const inflowRate = parseFloat(this.inflowSlider.value) / 100;
+    const outflowRate = parseFloat(this.outflowSlider.value) / 100;
+    const baseFlow = 50;
+    const inflow = baseFlow * inflowRate;
+    const outflow = baseFlow * outflowRate;
+    const net = inflow - outflow;
+
+    this.stock += net;
+    if (this.stock < 0) this.stock = 0;
+    this.updateStockDisplay();
+    this.updateChart();
+  }
+
+  showToast(message) {
+    this.toast.textContent = message;
+    this.toast.classList.add('visible');
+    setTimeout(() => this.toast.classList.remove('visible'), 3000);
+  }
+
+  initChart() {
+    this.chart = new Chart(this.chartCanvas, {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Stock Level',
+          data: [],
+          borderColor: '#0D47A1',
+          fill: false
+        }]
+      },
+      options: {
+        responsive: true,
+        animation: false,
+        scales: {
+          x: { display: false },
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  }
+
+  updateChart() {
+    const timestamp = new Date().toLocaleTimeString();
+    this.chart.data.labels.push(timestamp);
+    this.chart.data.datasets[0].data.push(this.stock.toFixed(1));
+    if (this.chart.data.labels.length > 50) {
+      this.chart.data.labels.shift();
+      this.chart.data.datasets[0].data.shift();
+    }
+    this.chart.update();
+  }
+
+  exportData() {
+    const rows = this.chart.data.labels.map((label, i) => `${label},${this.chart.data.datasets[0].data[i]}`);
+    const csvContent = "data:text/csv;charset=utf-8,Time,Stock\n" + rows.join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "stock_data.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 }
 
-// --- INITIALIZATION ---
-updateSliderDisplay(inflowSlider, inflowValue);
-updateSliderDisplay(outflowSlider, outflowValue);
-updateStockDisplay();
-
-// Set initial scenario button labels
-scenarioLabels.forEach((label, index) => {
-  scenarioButtons[index].textContent = label.value;
+// --- INITIALIZE SIMULATOR ---
+document.addEventListener('DOMContentLoaded', () => {
+  new StockFlowSimulator();
 });
-
-// --- EVENT LISTENERS ---
-// Dynamic label updates
-inflowLabelInput.addEventListener('input', () => {
-  inflowTextSVG.textContent = inflowLabelInput.value;
-});
-outflowLabelInput.addEventListener('input', () => {
-  outflowTextSVG.textContent = outflowLabelInput.value;
-});
-scenarioLabels.forEach((label, index) => {
-  label.addEventListener('input', () => {
-    scenarioButtons[index].textContent = label.value;
-  });
-});
-
-// Slider updates
-inflowSlider.addEventListener('input', () => updateSliderDisplay(inflowSlider, inflowValue));
-outflowSlider.addEventListener('input', () => updateSliderDisplay(outflowSlider, outflowValue));
-
-// Apply shock
-applyShockBtn.addEventListener('click', () => {
-  const shockAmount = parseFloat(shockInput.value);
-  applyShock(shockAmount);
-  shockInput.value = '';
-});
-
-// Scenario buttons
-scenarioButtons[0].addEventListener('click', () => {
-  stock -= 300; // Disaster
-  if (stock < 0) stock = 0;
-  inflowSlider.value = 15;
-  outflowSlider.value = 70;
-  updateSliderDisplay(inflowSlider, inflowValue);
-  updateSliderDisplay(outflowSlider, outflowValue);
-  updateStockDisplay();
-});
-scenarioButtons[1].addEventListener('click', () => {
-  inflowSlider.value = 75; // Boom
-  outflowSlider.value = 50;
-  updateSliderDisplay(inflowSlider, inflowValue);
-  updateSliderDisplay(outflowSlider, outflowValue);
-});
-scenarioButtons[2].addEventListener('click', () => {
-  inflowSlider.value = 58; // Policy
-  outflowSlider.value = 42;
-  updateSliderDisplay(inflowSlider, inflowValue);
-  updateSliderDisplay(outflowSlider, outflowValue);
-});
-
-// --- SIMULATION LOOP ---
-function runSimulationStep() {
-  const inflowRate = parseFloat(inflowSlider.value) / 100;
-  const outflowRate = parseFloat(outflowSlider.value) / 100;
-
-  const inflowAmount = BASE_FLOW_VALUE * inflowRate;
-  const outflowAmount = BASE_FLOW_VALUE * outflowRate;
-  const netChange = inflowAmount - outflowAmount;
-
-  stock += netChange;
-  if (stock < 0) stock = 0;
-
-  updateStockDisplay();
-}
-
-setInterval(runSimulationStep, SIMULATION_INTERVAL);
