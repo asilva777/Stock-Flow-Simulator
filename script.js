@@ -1,27 +1,25 @@
-// Get elements
 const inflowSlider = document.getElementById('inflowSlider');
 const outflowSlider = document.getElementById('outflowSlider');
 const shockInput = document.getElementById('shockInput');
 const applyShockBtn = document.getElementById('applyShockBtn');
-
 const inflowValue = document.getElementById('inflowValue');
 const outflowValue = document.getElementById('outflowValue');
 const svg = document.getElementById('stockFlowChart');
 
-// Initialize state
-let reserves = 100;
+// Scenario buttons
+const disasterBtn = document.getElementById('disasterBtn');
+const boomBtn = document.getElementById('boomBtn');
+const taxBtn = document.getElementById('taxBtn');
 
-// Update values live
+let reserves = 100;
+let history = [];
+
+// Update labels
 inflowSlider.addEventListener('input', () => {
   inflowValue.textContent = inflowSlider.value;
-  inflowSlider.setAttribute('aria-valuenow', inflowSlider.value);
-  updateChart();
 });
-
 outflowSlider.addEventListener('input', () => {
   outflowValue.textContent = outflowSlider.value;
-  outflowSlider.setAttribute('aria-valuenow', outflowSlider.value);
-  updateChart();
 });
 
 // Apply shock
@@ -30,35 +28,66 @@ applyShockBtn.addEventListener('click', () => {
   if (!isNaN(shock) && shock >= 0) {
     reserves -= shock;
     if (reserves < 0) reserves = 0;
-    updateChart();
+    addToHistory(reserves);
+    renderChart();
   } else {
-    alert('Please enter a valid non-negative number.');
+    alert('Enter a valid non-negative number.');
   }
 });
 
-// Update chart (simple demo visualization)
-function updateChart() {
+// Scenario actions
+disasterBtn.addEventListener('click', () => {
+  reserves -= 20; // sudden cost
+  if (reserves < 0) reserves = 0;
+  addToHistory(reserves);
+  renderChart();
+});
+
+boomBtn.addEventListener('click', () => {
+  reserves += 15; // sudden revenue
+  addToHistory(reserves);
+  renderChart();
+});
+
+taxBtn.addEventListener('click', () => {
+  inflowSlider.value = parseInt(inflowSlider.value) + 10;
+  inflowValue.textContent = inflowSlider.value;
+});
+
+// Add to history
+function addToHistory(value) {
+  history.push(value);
+  if (history.length > 30) history.shift();
+}
+
+// Simulate each step
+function simulateStep() {
   const inflow = parseFloat(inflowSlider.value);
   const outflow = parseFloat(outflowSlider.value);
-
-  reserves += (inflow - outflow) * 0.1; // Simplified model
+  reserves += (inflow - outflow) * 0.1;
   if (reserves < 0) reserves = 0;
-
-  renderChart(reserves);
+  addToHistory(reserves);
+  renderChart();
 }
 
-// Draw bar chart (placeholder)
-function renderChart(value) {
-  svg.innerHTML = ''; // Clear previous
-  const barHeight = Math.min(250, value * 2); 
-  const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-  rect.setAttribute('x', '250');
-  rect.setAttribute('y', 300 - barHeight);
-  rect.setAttribute('width', '100');
-  rect.setAttribute('height', barHeight);
-  rect.setAttribute('fill', '#00796b');
-  svg.appendChild(rect);
+// Render dynamic bar chart
+function renderChart() {
+  svg.innerHTML = '';
+  history.forEach((v, i) => {
+    const barHeight = Math.max(0, Math.min(250, v * 2));
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('x', i * 20);
+    rect.setAttribute('y', 300 - barHeight);
+    rect.setAttribute('width', 15);
+    rect.setAttribute('height', barHeight);
+    rect.setAttribute('fill', '#00796b');
+    svg.appendChild(rect);
+  });
 }
 
-// Initialize first chart
-updateChart();
+// Loop
+setInterval(simulateStep, 1000);
+
+// Init
+addToHistory(reserves);
+renderChart();
